@@ -1,5 +1,6 @@
 package org.example;
 
+import org.example.CellState;
 import java.util.Arrays;
 
 public class GameBoard {

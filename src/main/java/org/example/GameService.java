@@ -8,6 +8,10 @@ public class GameService {
         this.gameBoard = gameBoard;
     }
 
+    public GameBoard getGameBoard () {
+        return this.gameBoard;
+    }
+
     public int evaluateNeighborCountOfCell (int row, int col) {
         //TODO define calculation
         return 0;
@@ -28,20 +32,11 @@ public class GameService {
     }
 
     public boolean checkIfCellWillBeAlive (int row, int col) {
-        // Any live cell with fewer than two live neighbours dies, as if caused by underpopulation.
-        if(evaluateNeighborCountOfCell(row, col) < 2 && gameBoard.isCellAlive(row, col)) {
-            return false;
-        }
-        // Any live cell with two or three live neighbours lives on to the next generation.
-        if((evaluateNeighborCountOfCell(row, col) == 2 || evaluateNeighborCountOfCell(row, col) == 3) && gameBoard.isCellAlive(row, col)) {
-            return true;
-        }
-        // Any live cell with more than three live neighbours dies, as if by overpopulation.
-        if(evaluateNeighborCountOfCell(row, col) > 3 && gameBoard.isCellAlive(row, col)) {
-            return false;
-        }
-        // Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
-        if(evaluateNeighborCountOfCell(row,col) == 3 && !gameBoard.isCellAlive(row, col)) {
+        Rules rules = new Rules(this);
+        if (rules.checkIfCellIsOverpopulated(row, col)
+                && rules.checkIfCellIsReproducing(row, col)
+                && rules.checkIfCellIsUnderpopulated(row, col)
+                && rules.checkIfCellHasTwoOrThreeNeighbors(row,col)) {
             return true;
         }
         return false;
